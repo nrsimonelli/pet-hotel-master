@@ -94,14 +94,15 @@ def edit_checkin(id):
     except (Exception, psycopg2.Error) as error:
         print("Error updating checkin from database", error)
 
-def count_pets(id):
+def count_pets():
     try:
         connection = get_connection()
         cursor = connection.cursor()
-        sql_count_query = """SELECT COUNT(pet) FROM pet WHERE owner_id = %s;"""
-        cursor.execute(sql_count_query, (id,))
+        sql_count_query = """SELECT owner.name, COUNT(pet.owner_id) AS "Number of Pets"
+            FROM pet JOIN owner ON pet.owner_id = owner.id GROUP BY owner.name;"""
+        cursor.execute(sql_count_query)
         records = cursor.fetchall()
-        return records[0][0]
+        return records
     except (Exception, psycopg2.Error) as error:
         print("Error getting count of pets from database", error)
     finally:
@@ -134,11 +135,12 @@ class PetHotel(Resource):
     edit_checkin(id)
     return 201
 
-  def get(self, id):
-    return count_pets(id)
-   
-api.add_resource(PetHotel, "/", "/<int:id>")
+class Managers(Resource):
+  def get(self):
+    return count_pets()
 
+api.add_resource(PetHotel, "/", "/<int:id>")
+api.add_resource(Managers, "/managers")
 # @app.route("/")
 
 if __name__ == "__main__":
