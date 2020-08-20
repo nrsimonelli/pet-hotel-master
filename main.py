@@ -94,6 +94,17 @@ def edit_checkin(id):
     except (Exception, psycopg2.Error) as error:
         print("Error updating checkin from database", error)
 
+def count_pets(id):
+    try:
+        connection = get_connection()
+        cursor = connection.cursor()
+        sql_count_query = """SELECT COUNT(pet) FROM pet WHERE owner_id = %s;"""
+        cursor.execute(sql_count_query, (id,))
+        records = cursor.fetchall()
+        print(records[0][0])
+        close_connection(connection)
+    except (Exception, psycopg2.Error) as error:
+        print("Error getting count of pets from database", error)
 
 
 # creating dictionary
@@ -121,7 +132,11 @@ class PetHotel(Resource):
 
   def patch(self, id):
     edit_checkin(id)
-    return 201   
+    return 201
+
+  def get(self, id):
+    count_pets(id)
+    return 200
    
 api.add_resource(PetHotel, "/", "/<int:id>")
 
