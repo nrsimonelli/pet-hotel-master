@@ -101,11 +101,11 @@ def count_pets(id):
         sql_count_query = """SELECT COUNT(pet) FROM pet WHERE owner_id = %s;"""
         cursor.execute(sql_count_query, (id,))
         records = cursor.fetchall()
-        print(records[0][0])
-        close_connection(connection)
+        return records[0][0]
     except (Exception, psycopg2.Error) as error:
         print("Error getting count of pets from database", error)
-
+    finally:
+        close_connection(connection)
 
 # creating dictionary
 pets = [{"pet": "birdo", "owner": "max", "breed": "parakeet", "color": "blue", "check-in": "no" },
@@ -135,8 +135,7 @@ class PetHotel(Resource):
     return 201
 
   def get(self, id):
-    count_pets(id)
-    return 200
+    return count_pets(id)
    
 api.add_resource(PetHotel, "/", "/<int:id>")
 
