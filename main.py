@@ -32,21 +32,32 @@ def read_database_version():
     except (Exception, psycopg2.Error) as error:
         print("Error while getting data", error)
 
-print("Question 1: Print Database version")
+# runs read_database_version and tests connection to PostgreSQL
+print("Printing Database version:")
 read_database_version()
 
-# function to get rows from table "pet"
-# try:
-#     connection = psycopg2.connect(db)
-#     cursor = connection.cursor()
-#     select_query = "SELECT * FROM owner JOIN pet ON owner.id = pet.owner_id ORDER BY pet.id;"
+def select_all_pets():
+    try:
+        connection = get_connection()
+        cursor = connection.cursor()
+        sql_select_query = """SELECT * FROM owner JOIN pet ON owner.id = pet.owner_id ORDER BY pet.id;"""
+        cursor.execute(sql_select_query)
+        records = cursor.fetchall()
+        print("Printing all pets")
+        for row in records:
+            print("Owner's name: ", row[1])
+            print("Pet's name: ", row[4])
+            print("Animal Breed: ", row[5])
+            print("Color: ", row[6])
+            print("Checked In: ", row[7])
+        close_connection(connection)
+    except (Exception, psycopg2.Error) as error:
+        print("Error getting pets", error)
 
-#     cursor.execute(select_query)
-#     print("Selecting all from pets")
+# runs function to get all rows from pet table
+print("Getting all pets:")
+select_all_pets()
 
-# except (Exception, psycopg2.Error) as error :
-#     print ("Error while connecting to PostgreSQL", error)
-# end try catch
 
 # creating dictionary
 pets = [{"pet": "birdo", "owner": "max", "breed": "parakeet", "color": "blue", "check-in": "no" },
