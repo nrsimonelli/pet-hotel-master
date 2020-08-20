@@ -111,7 +111,7 @@ class PetHotel(Resource):
     pets[0] = {"pet": 'TEST'}
     return 201   
    
-api.add_resource(PetHotel, "/<int:id>")
+api.add_resource(PetHotel, "/", "/<int:id>")
 
 # @app.route("/")
 
