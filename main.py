@@ -22,10 +22,13 @@ class PetHotel(Resource):
     return 201
 
   def delete(self):
-    return 409
+    if len(pets) > 0:    
+      del pets[len(pets)-1]
+      
+    return '', 204 
 
-  def patch(self):
-    return 201  
+  # def patch(self):
+     
    
 api.add_resource(PetHotel, "/")
 
