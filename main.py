@@ -83,6 +83,18 @@ def delete_pet(id):
     except (Exception, psycopg2.Error) as error:
         print("Error deleting pet from database", error)
 
+def edit_checkin(id):
+    try:
+        connection = get_connection()
+        cursor = connection.cursor()
+        sql_update_query = """UPDATE pet SET check_in = False WHERE pet.id=%s;"""
+        cursor.execute(sql_update_query, (id,))
+        connection.commit()
+        close_connection(connection)
+    except (Exception, psycopg2.Error) as error:
+        print("Error updating checkin from database", error)
+
+
 
 # creating dictionary
 pets = [{"pet": "birdo", "owner": "max", "breed": "parakeet", "color": "blue", "check-in": "no" },
@@ -107,8 +119,8 @@ class PetHotel(Resource):
     delete_pet(id)
     return '', 204 
 
-  def patch(self):
-    pets[0] = {"pet": 'TEST'}
+  def patch(self, id):
+    edit_checkin(id)
     return 201   
    
 api.add_resource(PetHotel, "/", "/<int:id>")
