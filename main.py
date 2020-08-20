@@ -15,10 +15,10 @@ def get_connection():
     return connection
 
 # closes connection to PostgreSQL
-# def close_connection(connection):
-#     if connection:
-#         connection.close()
-#         print("Postgres connection is now closed")
+def close_connection(connection):
+    if connection:
+        connection.close()
+        print("Postgres connection is now closed")
 
 # prints database version
 def read_database_version():
@@ -28,7 +28,7 @@ def read_database_version():
         cursor.execute("SELECT version();")
         db_version = cursor.fetchone()
         print("You are connect to PostgreSQL version: ", db_version)
-        # close_connection(connection)
+        close_connection(connection)
     except (Exception, psycopg2.Error) as error:
         print("Error while getting data", error)
 
