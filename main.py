@@ -27,8 +27,10 @@ class PetHotel(Resource):
       
     return '', 204 
 
-  # def patch(self):
-     
+  def patch(self):
+    pets[0] = {"pet": 'TEST'}
+
+    return 201   
    
 api.add_resource(PetHotel, "/")
 
