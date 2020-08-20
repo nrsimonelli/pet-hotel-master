@@ -10,16 +10,27 @@ pets = [{"pet": "birdo", "owner": "max", "breed": "parakeet", "color": "blue", "
         {"pet": "bruce", "owner": "tom", "breed": "falcon", "color": "brown", "check-in": "no" },
         {"pet": "tang", "owner": "robert", "breed": "cat", "color": "orange", "check-in": "yes" }]
 
+
 class PetHotel(Resource):
 # defining GET
   def get(self):
     # setting return with KEY and VALUE
+    return pets
+  
+  def post(self):
+    pets.append({"pet": "dexter", "owner": "nick", "breed": "robot", "color": "purple", "check-in": "yes" })
     return 201
 
+  def delete(self):
+    return 409
 
+  def patch(self):
+    return 201  
+   
 api.add_resource(PetHotel, "/")
 
 # @app.route("/")
 
 if __name__ == "__main__":
   app.run(debug=True)
+
