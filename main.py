@@ -139,7 +139,7 @@ class Managers(Resource):
   def get(self):
     return count_pets()
 
-api.add_resource(PetHotel, "/", "/<int:id>")
+api.add_resource(PetHotel, "/api/pet", "/<int:id>")
 api.add_resource(Managers, "/managers")
 # @app.route("/")
 
