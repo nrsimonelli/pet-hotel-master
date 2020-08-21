@@ -44,13 +44,11 @@ def select_all_pets():
         cursor.execute(sql_select_query)
         records = cursor.fetchall()
         print("Printing all pets")
+        all_animals = []
         for row in records:
-            print("Owner's name: ", row[1])
-            print("Pet's name: ", row[4])
-            print("Animal Breed: ", row[5])
-            print("Color: ", row[6])
-            print("Checked In: ", row[7])
-        return records
+            animal = {"owners_name": row[1], "pets_name": row[4], "breed": row[5], "color": row[6], "checked_in": row[7]}
+            all_animals.append(animal)
+        return all_animals
     except (Exception, psycopg2.Error) as error:
         print("Error getting pets", error)
     finally:
