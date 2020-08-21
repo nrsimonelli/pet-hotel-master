@@ -36,6 +36,25 @@ def read_database_version():
 print("Printing Database version:")
 read_database_version()
 
+def get_owners():
+    try:
+        connection = get_connection()
+        cursor = connection.cursor()
+        sql_select_query = """SELECT * FROM owner ORDER BY id ASC;"""
+        cursor.execute(sql_select_query)
+        records = cursor.fetchall()
+        print('this is owners records', records)
+        all_owners = []
+        for row in records:
+            owner = {"id": row[0], "name": row[1]}
+            all_owners.append(owner)
+        print('this is all_owners', all_owners)
+        return all_owners
+    except (Exception, psycopg2.Error) as error:
+        print("Error getting pets", error)
+    finally:
+        close_connection(connection)
+
 def select_all_pets():
     try:
         connection = get_connection()
@@ -58,6 +77,7 @@ def insert_new_pet(pet):
     try:
         connection = get_connection()
         cursor = connection.cursor()
+        print('pet is:', pet)
         sql_insert_query = """INSERT INTO pet (owner_id, pet, breed, color, check_in) VALUES 
 	(%s, %s, %s, %s, %s);"""
         cursor.execute(sql_insert_query, (pet["owner-id"], pet["pet"], pet["breed"], pet["color"], pet["check-in"]))
@@ -137,8 +157,17 @@ class Managers(Resource):
   def get(self):
     return count_pets()
 
+class Owners(Resource):
+  def get(self):
+    return get_owners()
+
 api.add_resource(PetHotel, "/api/pet", "/<int:id>")
-api.add_resource(Managers, "/managers")
+api.add_resource(Managers, "/<int:id>", "/unused")
+api.add_resource(Owners, "/api/owner")
+
+
+
+
 # @app.route("/")
 
 if __name__ == "__main__":
