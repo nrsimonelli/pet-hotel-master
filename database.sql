@@ -4,7 +4,7 @@ CREATE TABLE pet (
 	pet VARCHAR(50),
 	breed VARCHAR(50),
 	color VARCHAR(50),
-	check_in BOOLEAN
+	check_in BOOLEAN DEFAULT false
 );
 
 CREATE TABLE owner (
@@ -24,7 +24,7 @@ INSERT INTO owner (name) VALUES
 	('bob'),
 	('doug');
 
-INSERT INTO pet (owner_id, pet, breed, color, check_in) VALUES 
-	(1, 'birdo', 'parakeet', 'blue', true),
-	(1, 'snake', 'cobra', 'green', false),
-	(2, 'doug', 'eel', 'grey', true);
+INSERT INTO pet (owner_id, pet, breed, color) VALUES 
+	(1, 'birdo', 'parakeet', 'blue'),
+	(1, 'snake', 'cobra', 'green'),
+	(2, 'doug', 'eel', 'grey');

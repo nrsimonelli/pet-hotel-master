@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, request
 from flask_restful import Api, Resource
 
 app = Flask(__name__)
@@ -78,9 +78,9 @@ def insert_new_pet(pet):
         connection = get_connection()
         cursor = connection.cursor()
         print('pet is:', pet)
-        sql_insert_query = """INSERT INTO pet (owner_id, pet, breed, color, check_in) VALUES 
-	(%s, %s, %s, %s, %s);"""
-        cursor.execute(sql_insert_query, (pet["owner-id"], pet["pet"], pet["breed"], pet["color"], pet["check-in"]))
+        sql_insert_query = """INSERT INTO pet (owner_id, pet, breed, color) VALUES 
+	(%s, %s, %s, %s);"""
+        cursor.execute(sql_insert_query, (pet["owner_id"], pet["name"], pet["breed"], pet["color"]))
         connection.commit()
         close_connection(connection)
     except (Exception, psycopg2.Error) as error:
@@ -140,8 +140,9 @@ class PetHotel(Resource):
     return select_all_pets()
   
   def post(self):
-    # pets.append({"pet": "dexter", "owner": "nick", "breed": "robot", "color": "purple", "check-in": "yes" })
-    pet = {"pet": "dexter", "owner-id": 1, "breed": "robot", "color": "purple", "check-in": "yes" }
+ 
+    pet = request.get_json()
+    print('pet data?', pet)
     insert_new_pet(pet)
     return 201
 
@@ -161,10 +162,9 @@ class Owners(Resource):
   def get(self):
     return get_owners()
 
-api.add_resource(PetHotel, "/api/pet", "/<int:id>")
+api.add_resource(PetHotel, "/api/pet", "/api/newPet/", "/<int:id>")
 api.add_resource(Managers, "/<int:id>", "/unused")
 api.add_resource(Owners, "/api/owner")
-
 
 
 
